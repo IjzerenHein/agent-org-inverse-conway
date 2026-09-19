@@ -1,0 +1,14 @@
+{
+  "name": "agent-org",
+  "description": "Implementations of an agent organisation: process kits for running software projects with humans and coding agents.",
+  "owner": {
+    "name": "Hein Rutjes"
+  },
+  "plugins": [
+    {
+      "name": "inverse-conway",
+      "source": "./",
+      "description": "The inverse-Conway implementation of an agent organisation: process skills, templates and agent definitions."
+    }
+  ]
+}

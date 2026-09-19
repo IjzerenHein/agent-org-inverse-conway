@@ -1,0 +1,342 @@
+# Project profile: agent-org-inverse-conway, process v2, section 2.
+# Filled in by the profile skill. Approved by whoever holds decision rights; an agent never approves it.
+#
+# Every dial entry records:
+#   value        one of the allowed values in the comment above the entry (some dials hold rows instead)
+#   reason       one line. For source "observed", name the file or command that shows it.
+#                For source "owner", name who said it. For source "assumed", name the questions-ledger file.
+#   source       observed = positively seen in the repository or its hosting settings. Not finding
+#                           something is not an observation.
+#                owner    = stated by a named human in the interview
+#                assumed  = neither; a working assumption with an open entry in the questions ledger
+#   switches_on  one line: what the chosen value turns on in the process, copied from the
+#                "Sets" comment. Write "nothing" where the comment names nothing for that value.
+#
+# Every table row records `source` (same three values) and `basis`: the file, command, measurement or
+# named person behind its cells. Where cells differ, record the weakest source and name each in `basis`.
+#
+# Always asked, never "observed": P9 values, P10, P11, P13 and `staged` in release_surfaces. What the
+# repository shows there is an option to offer the owner. More generally, a value that switches
+# obligations off is never "observed".
+#
+# The process says a dial at its lowest value adds nothing. Read that as: a value adds nothing only
+# where its Sets comment names nothing for it, which is P3 a, P5 a, P10 a, P12 a, P13 a and P14 a.
+# For those, add no rows, gates or work. P1, P4, P6 and P9 set something at every value; P2, P7, P8,
+# P11 and P15 have no lowest value.
+# Dials without letters (P2, P7, P8, P11, P15) record facts instead of one value. P2, P6, P8, P11 and
+# P15 hold several facts: where those have different sources, record the weakest (assumed, then owner,
+# then observed) and name each fact's source in `reason`.
+# Never fill a cell with a guess. An unknown is written as "unknown (<questions-ledger file>)".
+
+process_version: "2"
+profiled_on:                  # YYYY-MM-DD of this interview
+
+approval:
+  approver:                   # name and role of whoever holds decision rights over this profile (from the interview)
+  status: proposed            # proposed | approved. The skill always writes "proposed"; only the approver changes it.
+  approved_on:                # YYYY-MM-DD, filled in by the approver, never by an agent
+  approved_in:                # commit or pull request in which the approver set the status; filled in by the approver
+  # The approval is the approver's own commit or hosting-UI approval; these fields only mirror it.
+  # A reader treats "approved" without `approved_in` as "proposed".
+  # Any later change to dials, tables, overlays or artefact paths sets status back to "proposed".
+
+# Artefact paths. Every process skill reads this table first; without it, each skill falls back
+# to the default shown here. Change a path only if the project already keeps that artefact elsewhere.
+artefacts:
+  profile: docs/process/profile.yml    # fixed: every process skill looks here; do not change
+  adoption: docs/process/adoption.md
+  vision: docs/vision.md
+  roadmap: docs/roadmap.md
+  adr: docs/adr                        # decision and contract records: NNNN-slug.md
+  specs: docs/specs                    # NNN-slug.md
+  specs_shipped: docs/specs/shipped    # shipped specs move here
+  ledgers: docs/ledgers                # one file per entry: <kind>/YYYY-MM-DD-slug.md
+                                       # kinds: questions, facts, findings, experiments, obligations, escapes, pending-acceptance
+  memory: AGENTS.md                    # always-on memory; a CLAUDE.md beside it contains "@AGENTS.md"
+  path_rules: .claude/rules            # craft about one module: <module>.md with `paths:`; for tools without
+                                       # path rules, a nested AGENTS.md in that module's directory
+  project_skills: .claude/skills       # cross-module craft: <name>/ here, or under .agents/skills
+
+dials:
+
+  # P1 Coupling
+  # Values: 0 unformed | a tight | b modular | c several deployables
+  # Medium: files | shared state | runtime indirection
+  # Sets: width. Parallel only when touches plus affects are disjoint; affects is mandatory unless
+  #   the medium is files. 0: width 1, no module map until seams are observed. Kernel paths get an
+  #   owner and a queue. Oversized units: chunk readers append findings.
+  # Kernel paths: the process names them without a definition; the kit reads them as the paths that
+  #   almost every change touches. The paths may be observed; each owner is asked.
+  P1:
+    value:
+    medium:
+    kernel_paths: []          # rows: { path: , owner: }
+    reason:
+    source:
+    switches_on:
+
+  # P2 People, payback
+  # Values: per human: operates agents, reads diffs, evidence they can judge, paths they may approve.
+  #   Plus the payback metric.
+  # Sets: gate owners and packet forms. Non-engineers merge their own reversible path class on
+  #   green CI when the guard confines the diff.
+  P2:
+    people:
+      - name:
+        role:
+        operates_agents:              # true | false
+        reads_diffs:                  # true | false
+        evidence_they_can_judge: []   # for example: test output, visual diffs, business-language discrepancy batches
+        paths_they_may_approve: []    # globs or path classes
+    payback_metric:                   # in the owner's words; an agent never invents it
+    reason:
+    source:
+    switches_on:
+
+  # P3 Authority
+  # Values: a one owner | b several in a team | c several teams or functions
+  # Sets: b: section owners approve in the hosting UI. c: contract record first; decision rights
+  #   per path class, with quorum and timeouts.
+  P3:
+    value:
+    decision_rights: []       # c only; asked per path class, never inferred.
+                              # Rows: { path_class: , approvers: [], quorum: , timeout: }
+    reason:
+    source:
+    switches_on:
+
+  # P4 Independence
+  # Values: a none | b four-eyes | c mandated function
+  # Sets: role matrix; the spec approver is author of record, named in a commit trailer.
+  #   b, c: no default-if-silent, full diff read, two-person rule on walls and publish.
+  # The role matrix is set at every value; at a it only names who holds each role. Human roles the
+  #   process names: section owner, spec approver, steward, harness owner, gate owner, promoter.
+  P4:
+    value:
+    role_matrix: []           # asked, never inferred. Rows: { role: , held_by: [], must_differ_from: [] }
+    reason:
+    source:
+    switches_on:
+
+  # P5 Trust, inflow
+  # Values: a closed, plan-driven | b inner-source | c open to strangers and their agents
+  # Sets: c: boundary contract, intake with a pre-screen and admission gate, scripted claim and
+  #   takeover, two-stage CI. The boundary contract also applies at b (process v2, section 4).
+  P5:
+    value:
+    reason:
+    source:
+    switches_on:
+
+  # P6 Start, knowledge
+  # Values: a greenfield | b brownfield with tests | c brownfield without tests
+  #   Also: intent known or discovered; behaviour understood or not; share of the system in the repo
+  # Sets: kinds enabled. a: records for irreversible stack choices, then a time-boxed walking
+  #   skeleton. c: reproducible build, exports with a blocking drift check, characterisation per seam.
+  P6:
+    value:
+    intent:                   # known | discovered
+    behaviour:                # understood | not understood
+    share_in_repo:            # in the owner's words, or a measurement you can name
+    kinds_enabled: []         # subset of: discover, characterise, probe, build, retire. The process does
+                              # not fix the kinds per value; the owner chooses.
+    reason:
+    source:
+    switches_on:
+
+  # P7 Oracle, per acceptance id
+  # Values: human-stated | legacy system | external standard | reporter's reproduction | human judgement
+  # Sets: legacy: adjudication defaults to preserving behaviour; a checker scores characterisation.
+  # A spec picks one oracle per acceptance id. The profile lists the oracles that exist here.
+  P7:
+    available:
+      - oracle:               # one of the five values
+        where:                # the person, system or standard that answers
+    reason:
+    source:
+    switches_on:
+
+  # P8 Verification, per module or lens
+  # Values per row: check exists ("yes" | "partial" | "no"); where it runs;
+  #   horizon (PR | nightly | soak | post-release); cost
+  # Sets: M0 closes "no" rows on paths agents will touch. Width and diff reading relax per path.
+  P8:
+    rows:
+      - path:                 # module path or lens name
+        check_exists:         # "yes" | "partial" | "no" (keep the quotes)
+        runs_where:
+        horizon:              # PR | nightly | soak | post-release
+        cost:                 # measured or owner-stated; never invented
+        agents_will_touch:    # true | false
+    reason:
+    source:
+    switches_on:
+
+  # P9 Blast radius, per path and surface
+  # Values: a contained | b quick rollback | c irreversible or slow rollback
+  # Sets: diff depth, escape threshold, stance checkers, soak. c: fix-forward or data-repair
+  #   runbook, tombstone before delete.
+  # The profile, never an agent, classifies reversibility. Any externally visible effect is irreversible.
+  # Always asked: source is owner or assumed, never observed, here and in every row.
+  P9:
+    value:                    # for every path and surface not listed in rows
+    rows: []                  # { path: , value: , reason: , source: } or
+                              # { surface: <a name from release_surfaces>, value: , reason: , source: }
+    reason:
+    source:                   # owner | assumed
+    switches_on:
+
+  # P10 Legal, controls
+  # Values: a none | b privacy, consumer or licence law | c regulated
+  # Sets: b: attested facts, a never-violate test per rule, licence checks. c: requirement
+  #   traceability, mandated controls, evidence retention.
+  # Always asked: finding no licence or compliance file is not "a none". Which law applies is a fact
+  #   about the outside world, attested by a named person (rule V7).
+  P10:
+    value:
+    rules_in_force: []        # b, c. Rows: { rule: , attested_by: , role: , valid_from: , valid_until: }
+    reason:
+    source:                   # owner | assumed
+    switches_on:
+
+  # P11 Perimeter
+  # Values: what agents may read; where inference runs; approved models; cloud agents or not
+  # Sets: read allowlist, masked or synthetic data, disposable or leased databases, pinned model
+  #   upgraded as a gated slice.
+  # Always asked: existing agent configuration is an option to offer, not the owner's answer.
+  P11:
+    agents_may_read: []       # allowlist of paths, connectors and environments; the rest arrives human-sanitised
+    inference_runs:           # where inference may run
+    approved_models: []
+    cloud_agents:             # true | false
+    reason:
+    source:                   # owner | assumed
+    switches_on:
+
+  # P12 External interfaces, each, toolchains and devices included
+  # Values per interface: a none | b sandboxed | c constrained | d certified or gatekept
+  # Sets: b: contract or matrix tests. c: fake-by-default transport, human-captured fixtures,
+  #   request budget, blocking health check. d: lead time in the roadmap.
+  P12:
+    rows: []                  # one per interface: { interface: , value: , reason: , source: }
+                              # no external interfaces: leave empty; that is "a none", and the owner confirms it
+    reason:
+    source:
+    switches_on:
+
+  # P13 Consumers, skew
+  # Values: a atomic | b skewed own clients or cross-team | c public | d unknown
+  # Sets: b: contract tests per released client, API diff, expand/contract. c: obligations ledger,
+  #   downstream canary. d: consumer discovery from telemetry.
+  # Always asked: finding no published package or public API is not "a atomic".
+  P13:
+    value:
+    reason:
+    source:                   # owner | assumed
+    switches_on:
+
+  # P14 Design weight
+  # Values: a none | b functional | c design-led
+  # Sets: b: screenshots at target viewports. c: pinned design source with drift check, `judged`
+  #   ids attested on device.
+  P14:
+    value:
+    target_viewports: []      # b, c
+    design_source:            # c: pointer to the pinned design source
+    reason:
+    source:
+    switches_on:
+
+  # P15 Lines, scope, change stream
+  # Values: release lines; paths under the process; hotfix rate; confidential track
+  # Sets: harness authoritative on the default branch; guard keyed on the agent credential; a hotfix
+  #   ends with a re-entry item; while two implementations coexist, a change carries a twin or a
+  #   recorded freeze; confidential work uses a private mirror.
+  P15:
+    release_lines: []         # branches or versions maintained side by side
+    paths_under_process: []   # globs
+    hotfix_rate:              # counted from history or owner-stated; never invented
+    confidential_track:       # true | false
+    reason:
+    source:
+    switches_on:
+
+# Overlays per ownership path. List only the dials that differ from the root values above.
+# A path takes the nearest overlay above it, else the root. A slice takes the strictest value over
+# every path in its `touches` and `affects`.
+# The process (section 2) does not define "strictest" per dial. Until it does, this is the kit's reading:
+#   P1: the earlier value (0, then a, b, c), because it gives the narrower width. Medium: files is the
+#       least strict; any other medium makes `affects` mandatory.
+#   P3, P4, P5, P9, P10, P14: the later value.
+#   P6, P13: the values switch on different things and none contains another (P6 a and c; P13 b, c
+#       and d), so the slice takes everything that any of its values switches on.
+#   P11: the most restrictive answer.
+#   P8, P9 and P12 hold rows per path, surface or interface instead of overlays. A slice takes every
+#       row its `touches` and `affects` reach; a P8 relaxation holds only if every such row allows it.
+overlays: []
+# - path: path/to/area/**
+#   owner:                    # who owns this path
+#   dials:
+#     P4: { value: b, reason: "", source: owner, switches_on: "" }
+
+# Table 1. Gates. Design and release are the minimum. Decline is a valid outcome at every gate.
+# Owners and packet forms follow from P2. At P4 b or c, no gate has a default if silent.
+gates:
+  - gate: design
+    owner_role:
+    channel:                  # where the packet arrives and the answer is given
+    packet_form:              # for example: diffs, visual diffs, business-language discrepancy batches, release-level diffs
+    response_time:
+    default_if_silent:        # what happens when nobody answers in time; "none" at P4 b or c
+    source:                   # observed | owner | assumed
+    basis:                    # the file, command, measurement or named person behind this row
+  - gate: release
+    owner_role:
+    channel:
+    packet_form:
+    response_time:
+    default_if_silent:
+    source:
+    basis:
+
+# Table 2. Release surfaces, including those outside the repo: flags, backfills, store listing,
+# registry channel, agent-facing docs. A surface with staged: false means merge equals release for
+# it, and it gates synchronously. Agent credentials cannot merge, release, publish or edit walls,
+# so the promoter is a human role.
+release_surfaces:
+  - surface:
+    staged:                   # true | false. Always the owner's statement; a deploy workflow that releases
+                              # on merge is an option to offer, not the answer.
+    rollback_time:
+    third_party_latency:      # for example a store review or registry propagation; "none" if none
+    promoter:                 # the human role that promotes
+    audience:
+    source:                   # owner | assumed
+    basis:
+
+# Table 3. Done-states, in order, up to the last one the steward follows an item to.
+# Machine-produced evidence decides each one; a script writes post-merge states.
+done_states:
+  - state:                    # for example: merged, released, soaked, observed
+    evidence_source:          # the job, query or attestation that produces the evidence
+    horizon:                  # PR | nightly | soak | post-release, with a duration where it has one
+    retention:                # how long the evidence is kept
+    source:                   # observed | owner | assumed
+    basis:
+
+# Table 4. Systems of record. Each kind of fact has one writer and one system of record.
+systems_of_record:
+  - kind_of_fact:             # for example: work-item status, decisions, design source, telemetry
+    owning_system:            # a repo path, or a system outside the repo
+    enters_repo_by:           # for example: lives there, export with drift check, pointer plus link check, attested line
+    source:                   # observed | owner | assumed
+    basis:
+
+# Re-profile when one of these changes. The four words come from the process (section 2) and stay;
+# the comments are examples, not process text. Add project-specific triggers below them, in the
+# owner's words.
+reprofile_triggers:
+  - stage                     # for example: first users, public launch, move to maintenance
+  - team                      # for example: people join or leave; ownership paths or decision rights change
+  - regulator                 # for example: a law, licence term or mandated control starts or stops applying
+  - model                     # for example: a model upgrade, or a change to the approved models
