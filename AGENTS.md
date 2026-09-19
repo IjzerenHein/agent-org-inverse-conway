@@ -6,8 +6,18 @@ This repository is a process kit. `docs/process.md` is the source of truth; the 
 
 - `docs/process.md`: the process. `docs/research/` and `docs/history/` are records; do not edit them.
 - `skills/<name>/SKILL.md`: one skill per directory, with its templates in `skills/<name>/assets/`.
-- `agents/*.md`: Claude Code subagent definitions, flat files.
+- `agents/*.md`: Claude Code subagent definitions, flat files. They are generated; see below.
+- `shared/`: the one home of everything more than one artefact depends on: `templates/`, `briefs/` (the role contracts), `sentences.md` and `manifest.json`, which lists where each is copied to.
+- `scripts/sync-shared.mjs`: copies `shared/` into place. With `--check` it fails when a copy differs.
 - `.claude-plugin/`: the plugin manifest and the marketplace manifest. The repository is both.
+
+## Shared content
+
+A skill must be self-contained, yet skills share ledger formats, role contracts and some sentences. So those live once in `shared/` and are copied.
+
+- Never edit a generated file: a skill asset listed in `shared/manifest.json`, anything in `agents/`, or the text between `<!-- shared:KEY -->` and `<!-- /shared:KEY -->` markers. Edit the source in `shared/` and run `node scripts/sync-shared.mjs`.
+- A format or contract used by more than one artefact goes into `shared/` before the second artefact uses it.
+- To state a shared sentence in a skill, put the marker pair on their own lines; the sync fills the text.
 
 ## Rules for skills
 
@@ -27,6 +37,6 @@ This repository is a process kit. `docs/process.md` is the source of truth; the 
 
 - No project names or project facts. What a project learns stays in that project until a second project needs it.
 - A change to `docs/process.md` records what forced it in the change log.
-- Before committing, run `claude plugin validate <target> --strict` for each of `.`, `.claude-plugin/plugin.json`, `skills` and `agents`. The first checks only the marketplace manifest.
+- Before committing, run `node scripts/sync-shared.mjs --check`, then `claude plugin validate <target> --strict` for each of `.`, `.claude-plugin/plugin.json`, `skills` and `agents`. The first checks only the marketplace manifest.
 - Keep `CLAUDE.md` out of the repository root: a plugin root may not hold one. `.claude/CLAUDE.md` imports this file.
 - Installed copies only receive a change when `version` in `.claude-plugin/plugin.json` changes. Bump it with every change that projects should pick up; a project upgrades the kit as a work item of its own.

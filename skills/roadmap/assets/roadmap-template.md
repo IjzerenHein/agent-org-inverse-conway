@@ -6,10 +6,18 @@ How to fill this in. Delete this comment when done.
 - The order of the sections is the sequence. Milestone ids are stable and never reused.
 - Intent is quoted from the vision with a pointer, never paraphrased.
 - Every assumption and claim points to a ledger entry, a record or evidence. No pointer: write a questions-ledger entry and point to it. The entry holds the standing; do not copy it here.
-- Exit criterion types: `checked` (a machine check decides), `judged` (a named person attests, bound to a commit), `observed` (evidence from the running system over a stated window).
+- Exit criterion types: `checked` (a machine check decides), `judged` (a named person decides; the Evidence cell names what that person does, for example the attestation file of a `judged` acceptance id), `observed` (defined in the sentence below this comment).
+- The adoption checklist is the one home of the state of global M0. Point to its rows; copy none of their state here.
 - `<record path>` is the project's path for decision and contract records: the profile's artefacts table, or the default the skill names.
 - Learning is appended under "Pointers", never re-summarised.
+- Delete every HTML comment when done, the `shared:` marker lines included. The sentence between the markers stays.
 -->
+
+An exit row of type `observed` is decided as an `observed` acceptance id is:
+
+<!-- shared:observed -->
+An `observed` acceptance id is decided by evidence produced after merge, at a done-state and horizon that the profile's `done_states` table lists. A script writes that evidence, never the builder.
+<!-- /shared:observed -->
 
 | Field | Value |
 |---|---|
@@ -17,7 +25,7 @@ How to fill this in. Delete this comment when done.
 | Profile | `<path>` at `<commit>` |
 | Planned on | <YYYY-MM-DD> |
 | Near wave | <ids of the detailed milestones>; the rest is rough on purpose |
-| Approver | <name and role: owner of the ownership path this file sits in, per the profile. At P3 b or c add the owner of each near milestone's boundary, who approves that block> |
+| Approver | <name and role: owner of the `ownership_paths` row this file sits in, per the profile. At P3 b or c add the owner of each near milestone's boundary, who approves that block> |
 | Status lives in | <tracker named in the profile's systems-of-record table, or "no tracker"> |
 | Re-plan when | a milestone closes, an assumption is falsified, or the profile is re-profiled |
 
@@ -26,23 +34,25 @@ How to fill this in. Delete this comment when done.
 <!-- Three to six lines. Which risk puts which milestone first, and which fixed points constrain the order. Pointers, not retellings. -->
 
 - M<a> comes before M<b> because <assumption or unknown> (`<pointer>`)
-- Fixed point: <lead time (P12 d) or dated obligation> (`<pointer>`)
+- Fixed point: <lead time (P12 d), the `due` of an obligations entry, or a hard constraint or outcome date from the vision> (`<pointer>`)
 
 ## M0: verification and staging
 
 <!-- M0 carries no vision quote and no assumptions table. -->
 
-- Harness owner: <name, from the profile>. Builds and changes the walls through the ordinary human change path (T5). Agents do not edit walls.
-- Time-box: <given by the owner>
+- Harness owner: <name, from the profile: `dials.P4.role_matrix`, role `harness owner`>. Builds and changes the walls through the ordinary human change path (T5). Agents do not edit walls.
+- Time-box: <the owner's words, with a pointer: the adoption checklist where it records one, else interview batch 3>
 - Paths agents will touch in the near wave: `<path>`, `<path>`
-- Preconditions: <governance onboarding the profile demands (P10, P11) and who owns it, or "none">
-- Order inside M0: walls first, then verification rows. Whatever changes agent configuration, CI, capture jobs or release configuration is wall work, wiring a check into CI and building staging included.
+- Preconditions: <governance onboarding, from the profile's `governance_onboarding`: `n-a` when `needed` is false; when it is true, its `approvers` and what they require, and adoption checklist row 1.4 for whether it is complete>
+- Order inside M0: global M0 first, then verification rows. Whatever changes a wall is wall work, wiring a check into CI and building staging included.
 
-### Walls (global, kept small)
+### Global M0 (kept small)
 
-<!-- "yes" only with something that shows it: a path, a CI job, a settings export. Unknown counts as "no". -->
+<!-- With an adoption checklist: keep the pointer line and delete the table. The checklist is the one home of this state. Without a checklist: delete the pointer line and fill the table. "yes" only with something that shows it: a path, a CI job, a settings export. Unknown counts as "no". -->
 
-| Wall | Exists | Evidence or pointer |
+See adoption checklist rows 2.1 to 2.7 at `<checklist path>`.
+
+| Item | Exists | Evidence or pointer |
 |---|---|---|
 | Reproducible build | <yes / no> | |
 | Guard keeping a diff inside `touches` | | |
@@ -53,7 +63,7 @@ How to fill this in. Delete this comment when done.
 
 ### Verification rows to close
 
-<!-- Every P8 row with "check exists: no" on the paths above. Copy where it runs, horizon and cost from the profile. Do not estimate them. The harness owner wires every check into CI. "Built by" is about the check's own code: the harness owner, or an agent item of kind `characterise` or `build` that starts after the walls exist. -->
+<!-- Every P8 row with "check exists: no" on the paths above. Copy where it runs, horizon and cost from the profile. Do not estimate them. The harness owner wires every check into CI. "Built by" is about the check's own code: the harness owner, or an agent item of kind `characterise` or `build` that starts after global M0 exists. -->
 
 | Module or lens | Paths | Check to add | Where it runs | Horizon | Cost | Built by |
 |---|---|---|---|---|---|---|
@@ -61,7 +71,7 @@ How to fill this in. Delete this comment when done.
 
 ### Release surfaces to stage
 
-<!-- Every surface the profile lists as unstaged that a near milestone ships through (V6). Release configuration is wall work. An agent item may build only product code the staging needs, after the walls exist. -->
+<!-- Every surface the profile lists as unstaged that a near milestone ships through (V6). Release configuration is wall work. An agent item may build only product code the staging needs, after global M0 exists. -->
 
 | Surface | Staging to add | Built by | Promoter | Rollback time | If it stays unstaged |
 |---|---|---|---|---|---|
@@ -75,19 +85,14 @@ How to fill this in. Delete this comment when done.
 
 ### Exit criterion
 
-<!-- A starting point: one row per wall, each with its own judge. Agree the rows and their judges with the harness owner (interview batch 3). -->
+<!-- A starting point. Global M0 gets one row, which cites the adoption checklist rows and copies none of their state; without a checklist it cites the table above. Agree the rows and their judges with the harness owner (interview batch 3). -->
 
 | Id | True when | Type | Judge | Evidence |
 |---|---|---|---|---|
-| M0-E1 | the build is reproducible from a clean checkout | checked | <command or CI job> | <done-state and horizon from the profile> |
-| M0-E2 | the guard rejects a diff outside `touches` | checked | <CI check> | |
-| M0-E3 | the read wall holds: agents read only what the allowlist names | <checked / judged> | <command, or a named person> | |
-| M0-E4 | the execute wall holds: unreviewed code reaches no secret that can release or reach production | <checked / judged> | <command, or a named person> | |
-| M0-E5 | the acceptance job runs on the base branch | checked | <CI job> | |
-| M0-E6 | the machine credential cannot merge | <checked / judged> | <command, settings export, or a named person> | |
-| M0-E7 | every verification row above has a check that is green on the base branch, where the profile says it runs | checked | <CI job> | |
-| M0-E8 | every surface above is staged, or the profile's gates table names the synchronous gate for it | <checked / judged> | <command, or the promoter by name> | `<profile path>` |
-| M0-E9 | the profile's P8 rows and release-surface rows for the paths and surfaces above state what M0 changed, merged through the profile's own approval | judged | <the profile's approver by name> | <merge commit of the profile change> |
+| M0-E1 | every item of global M0 is in place: adoption checklist rows 2.1 to 2.6, and row 2.7 where it applies, are `done` with their evidence | <checked / judged> | <the commands or CI jobs those rows cite, or the harness owner by name> | `<checklist path>`, rows 2.1 to 2.7 |
+| M0-E2 | every verification row above has a check that is green on the base branch, where the profile says it runs | checked | <CI job> | |
+| M0-E3 | every surface above is staged, or the profile's gates table names the synchronous gate for it | <checked / judged> | <command, or the promoter by name> | `<profile path>` |
+| M0-E4 | the profile's P8 rows and release-surface rows for the paths and surfaces above state what M0 changed (the profile skill, row update), merged through the profile's own approval | judged | <the profile's approver by name> | <merge commit of the profile change> |
 
 ### Pointers
 
@@ -99,9 +104,9 @@ How to fill this in. Delete this comment when done.
 
 - Intent: "<verbatim quote from the vision>" (`<vision path>`, <heading or line>)
 - Produces: <knowledge / code / both>
-- Ownership boundary: <boundary from the profile>; owner: <name>
+- Ownership boundary: <`boundary` from the profile's `ownership_paths`>; owner: <name>
 - Risk addressed: <the assumption or unknown that puts this milestone here> (`<pointer>`)
-- Paths agents will touch: `<paths>`; strictest P9 value on them, from the profile: <a / b / c>
+- Paths agents will touch: `<paths>`; strictest P9 value on them, from the profile: <a / b / c, or `unclassified` where the profile gives none>
 - Release surfaces it ships through: <surface, staged or unstaged per the profile, or "none">
 - Tracker pointer: <link, if the profile names a tracker for status>
 
@@ -129,7 +134,7 @@ How to fill this in. Delete this comment when done.
 
 ### Verification to buy first
 
-<!-- P8 rows on this milestone's paths that are `partial`, or `no` and not closed by M0. They come before the `build` items. Wiring a check into CI and building staging stay with the harness owner. When this milestone buys verification or staging, add an exit row like M0-E9: the profile states what changed, merged through the profile's own approval. -->
+<!-- P8 rows on this milestone's paths that are `partial`, or `no` and not closed by M0. They come before the `build` items. Wiring a check into CI and building staging stay with the harness owner. When this milestone buys verification or staging, add an exit row like M0-E4: the profile states what changed (the profile skill, row update), merged through the profile's own approval. -->
 
 - <P8 row>: <check to add>, <where it runs>, <horizon>, built by <harness owner / agent item>
 
@@ -149,7 +154,7 @@ How to fill this in. Delete this comment when done.
 
 - Intent: "<verbatim quote from the vision>" (`<vision path>`, <heading or line>)
 - Must be learned or decided first: <pointers to question entries, or the milestone that answers them>
-- Fixed points: <lead time or dated obligation with pointer, or "none">
+- Fixed points: <lead time, obligation `due`, or vision constraint or outcome date, with pointer; or "none">
 
 ### Pointers
 
@@ -161,4 +166,4 @@ How to fill this in. Delete this comment when done.
 
 | Id | Name | Outcome | Date | Evidence or decision pointer |
 |---|---|---|---|---|
-| <M<n>> | <name> | <met / dropped> | <YYYY-MM-DD> | `<evidence id, attestation commit, or decision record>` |
+| <M<n>> | <name> | <met / dropped> | <YYYY-MM-DD> | `<evidence id, attestation file, or decision record>` |

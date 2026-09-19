@@ -1,0 +1,116 @@
+{
+  "templates": {
+    "question-entry-template.md": [
+      "skills/adopt/assets/question-entry-template.md",
+      "skills/profile/assets/question-entry-template.md",
+      "skills/vision/assets/question-entry-template.md",
+      "skills/roadmap/assets/question-entry-template.md",
+      "skills/adr/assets/question-entry-template.md",
+      "skills/spec/assets/question-entry-template.md",
+      "skills/build/assets/question-entry-template.md",
+      "skills/lens-placement/assets/question-entry-template.md",
+      "skills/retro/assets/question-entry-template.md"
+    ],
+    "fact-entry-template.md": [
+      "skills/adopt/assets/fact-entry-template.md",
+      "skills/adr/assets/fact-entry-template.md",
+      "skills/lens-placement/assets/fact-entry-template.md"
+    ],
+    "finding-entry-template.md": [
+      "skills/roadmap/assets/finding-entry-template.md",
+      "skills/spec/assets/finding-entry-template.md",
+      "skills/build/assets/finding-entry-template.md",
+      "skills/lens-placement/assets/finding-entry-template.md"
+    ],
+    "escape-entry-template.md": [
+      "skills/retro/assets/escape-entry-template.md"
+    ],
+    "experiment-entry-template.md": [
+      "skills/retro/assets/experiment-entry-template.md",
+      "skills/lens-placement/assets/experiment-entry-template.md"
+    ],
+    "obligation-entry-template.md": [
+      "skills/lens-placement/assets/obligation-entry-template.md"
+    ],
+    "pending-acceptance-entry-template.md": [
+      "skills/spec/assets/pending-acceptance-entry-template.md"
+    ],
+    "attestation-template.md": [
+      "skills/spec/assets/attestation-template.md",
+      "skills/build/assets/attestation-template.md"
+    ],
+    "rubric-template.md": [
+      "skills/spec/assets/rubric-template.md"
+    ],
+    "spec-template.md": [
+      "skills/spec/assets/spec-template.md"
+    ],
+    "profile-template.yml": [
+      "skills/profile/assets/profile-template.yml"
+    ]
+  },
+  "briefs": {
+    "spec-critic": {
+      "frontmatter": {
+        "name": "spec-critic",
+        "description": "Read-only critic of one spec, run in a fresh context before approval. Use it after a spec is drafted or amended and before its section owners and value owners approve it. Pass the spec path and today's date, never a summary of a conversation. It reads the profile, the spec, its pinned sources, its open questions and appended pointers, the lenses it names and the code it touches, then returns numbered rule violations with severity and questions batched per owner, each marked blocking or not. It never edits the spec and never answers its own questions.",
+        "tools": "Read, Grep, Glob"
+      },
+      "copies": [
+        "skills/spec/assets/spec-critic-brief.md"
+      ]
+    },
+    "builder": {
+      "frontmatter": {
+        "name": "builder",
+        "description": "Carries exactly one approved spec to a pull request. Use when a work item has an approved spec and no other writer; start at most one per work item. Pass the spec path and nothing else. Reads the profile, the spec with its dependencies, open questions and appended pointers, and its named lenses and pinned sources by path before any code, edits only inside the spec's touches, and returns a structured report with no success field. A blocked report is a valid outcome: either a precondition that failed (not approved, a dependency or a blocking question still open) or one question for a section owner, a value owner, the steward or the profile approver.",
+        "tools": "Read, Edit, Write, Grep, Glob, Bash"
+      },
+      "copies": [
+        "skills/build/assets/builder-brief.md"
+      ]
+    },
+    "checker": {
+      "frontmatter": {
+        "name": "checker",
+        "description": "Independent evaluator of one pull request against its spec. Use in a fresh context, always from a base checkout, after the pull request has machine-produced evidence and before a human gate sees it. Pass only the spec path, the base and head refs of the diff, the ids or paths of machine-produced evidence, any kind-specific inputs by path, and the harness switch execution. Never pass the builder's narrative, reasoning or craft lenses. Start it again, fresh, once a judged id's attestation has landed. Returns an overall of not accepted, incomplete (only attestations outstanding) or not refuted, a verdict per acceptance id, findings as failing commands, scope violations, and a record of what it ran and what it could not test. Read-only; it never edits code, attests, approves or merges.",
+        "tools": "Read, Grep, Glob, Bash"
+      },
+      "copies": [
+        "skills/build/assets/checker-brief.md"
+      ]
+    },
+    "researcher": {
+      "frontmatter": {
+        "name": "researcher",
+        "description": "Read-only researcher for one question that feeds a decision record, a roadmap, a questions entry or a findings entry. Use it when evidence or options must be gathered from the repository or from allowed outside sources. Several may run in parallel, one per disjoint question or per option of a record. Give it the question, the allowed sources and the path of the artefact it feeds; when the project has no approved profile, also give it the constrained systems (a list, or none). It returns five sections: the question, findings with evidence or marked as hypotheses, options with trade-offs, open questions for a human and the sources it could not reach. It never decides and never writes.",
+        "tools": "Read, Grep, Glob, WebSearch, WebFetch"
+      },
+      "copies": [
+        "skills/adr/assets/researcher-brief.md",
+        "skills/roadmap/assets/researcher-brief.md"
+      ]
+    }
+  },
+  "sentences": [
+    "walls",
+    "approved-vision",
+    "approved-profile",
+    "proposed-profile",
+    "missing-profile",
+    "approved-spec",
+    "p9-lookup",
+    "lens-source-mark",
+    "observed",
+    "judged-attestation",
+    "pending-acceptance-close",
+    "shipped-spec",
+    "blocked-question-return",
+    "pr-spec-line",
+    "ledger-entry",
+    "questions-close",
+    "m0",
+    "floor",
+    "casing"
+  ]
+}

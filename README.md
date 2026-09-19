@@ -30,7 +30,7 @@ The name states the idea: shape the organisation to get the architecture you wan
 
 Version 2 of the design, dated 2026-09-19. It has not been used on a real project yet.
 
-The kit (skills and agent definitions) is version 0.1. Its parts were reviewed one by one, and a pass over all of them together found 29 inconsistencies between them, listed in `KNOWN-ISSUES.md`. The repair is in progress.
+The kit (skills and agent definitions) is version 0.2. In version 0.1 its parts were reviewed one by one, and a pass over all of them together found 29 inconsistencies between them. Version 0.2 is the repair: the formats, role contracts and sentences that several parts share were written once, in `shared/`, and every skill was rebuilt against them. The repaired kit passes its mechanical checks but has not yet had a second pass over all parts together; `KNOWN-ISSUES.md` says what that means.
 
 - It was designed for one project first, then generalised, then attacked with four thought experiments (a regulated payments platform, a three-person mobile startup, an open-source library, a fifteen-year-old monolith). Version 2 is the repair.
 - Every agent involved in the design was the same model family, so agreement between them is weaker evidence than it looks.
@@ -121,16 +121,18 @@ Start with `adopt`, which keeps a checklist of where the project stands.
 | `adr` | `docs/adr/NNNN-slug.md`: a decision or contract record, with its residue check |
 | `spec` | `docs/specs/NNN-slug.md`: the spec, which is also the builder's brief |
 | `lens-placement` | a placement table for a piece of expertise, and the edits it implies |
+| `build` | nothing of its own: the manual hand-over from an approved spec to the builder, the machine evidence, the checker and the human gate |
 | `retro` | escape entries and a retro note with decisions for the human |
 
 Agent definitions: `spec-critic`, `builder`, `checker`, `researcher`. They hold a stance, tool permissions and an output contract, and no domain knowledge.
 
-Not built yet: the `build` orchestration, the `brief`, `guard` and `packet` scripts, and CI templates. They wait for the pilot to show what they need to be.
+Not built yet: automated orchestration of a build, the `brief`, `guard` and `packet` scripts, and CI templates. The `build` skill is a manual procedure and says so. They wait for the pilot to show what they need to be.
 
 ## Contents
 
 - `.claude-plugin/`, `skills/`, `agents/`: the kit.
-- `KNOWN-ISSUES.md`: what does not fit together yet in version 0.1 of the kit.
+- `shared/`: the one home of the templates, role contracts and sentences that several skills use, with `shared/CONTRACTS.md` as the index. `scripts/sync-shared.mjs` copies them into the skills and generates `agents/`; with `--check` it fails when a copy has drifted.
+- `KNOWN-ISSUES.md`: the state of the kit's consistency, and the findings that version 0.2 repaired.
 - `AGENTS.md`: rules for working on this repository. `.claude/CLAUDE.md` imports it.
 - `docs/process.md`: the process, version 2. Core rules, the project profile (fifteen dials), the lens model, packaging and bootstrap, what the process is not for, the change log and the open questions.
 - `docs/research/`: the three research reports the design rests on, as the research agents returned them: published evidence on multi-agent systems, organisation theory applied to agents, and how Claude Code's context mechanisms behave. They were written with the first project as context; its details have been replaced with generic wording and one editor's note was added; nothing else was changed.

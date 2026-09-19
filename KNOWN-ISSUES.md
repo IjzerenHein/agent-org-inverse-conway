@@ -1,10 +1,16 @@
-# Known issues in version 0.1
+# Known issues
 
-Each skill and agent definition was written, reviewed and repaired on its own. A consistency pass then read all of them together and found the problems below: places where two artefacts disagree about a shared format, a hand-over or a definition. They are listed here as that pass reported them. A repair that writes the shared interfaces once and rebuilds the skills against them is in progress.
+## Version 0.2
 
-What this means in practice: the skills `adopt`, `profile`, `vision`, `roadmap` and `lens-placement` are usable on their own. The chain from `spec` to the `builder` and `checker` agent definitions does not fit together yet.
+Version 0.2 repairs the 29 findings listed below. The shared formats, role contracts and sentences were written once by a single writer, reviewed by a fresh agent (8 major and 7 minor findings, all applied), and every skill was then rebuilt against them. `shared/CONTRACTS.md` records, per finding, which part changed what.
 
-Counts: 1 blocker, 21 major, 7 minor.
+What has been checked: the sync drift check, strict plugin validation, frontmatter fields, self-containment of every skill, and that every asset a skill names exists.
+
+What has not been checked: a second pass over all parts together, of the kind that found these 29. Until that has run, treat the fit between the parts as repaired but unverified. The kit has also not been used on a real project yet.
+
+## Findings in version 0.1, repaired in 0.2
+
+Each skill and agent definition in version 0.1 was written, reviewed and repaired on its own. A consistency pass then read all of them together and found the problems below, listed as that pass reported them.
 
 ## 1. Blocker
 

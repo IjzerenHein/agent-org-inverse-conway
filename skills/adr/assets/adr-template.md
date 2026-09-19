@@ -14,9 +14,12 @@ decision-pointer:             # review URL or message id; "in session" only at P
 supersedes:                   # NNNN
 superseded-by:                # NNNN; filled when a later accepted record replaces this one
 irreversibility:
-  class: <profile value as written | irreversible (externally visible effect, V6) | unclassified>
-  source: <profile keys | the owner's quoted answer or the release surface's audience entry | question entry path>
-covers: []                    # paths, objects and release surfaces the decision covers
+  class: <a | b | c | unclassified>   # looked up in the profile, never chosen; unclassified is treated as c
+  source: <the profile keys the lookup used; where V6 made it c, also the owner's quoted answer or the release surface's audience entry; for unclassified, the path of the blocking questions entry>
+covers:                       # what the decision covers; the irreversibility lookup reads all three
+  paths: []                   # globs
+  objects: []                 # tables, queues, flags and other objects outside the file tree
+  surfaces: []                # names from the profile's release_surfaces: those the owner named and those whose paths match a covered path
 ---
 
 # NNNN: <title>
@@ -58,15 +61,15 @@ Kinds: quote, query, telemetry, reproduction, finding, attestation, hypothesis.
 |---|---|---|---|
 | C1 | <one claim> | quote | <URL>, retrieved YYYY-MM-DD: "<verbatim quote>" |
 | C2 | <one claim> | reproduction | `<command>` at <commit>: <observed output> |
-| C3 | <one claim> | attestation | <facts ledger path> |
+| C3 | <one claim> | attestation | <facts ledger path>; counts only while the entry is `attested` and inside its validity dates, and a `draft` entry is listed as hypothesis |
 | C4 | <one claim> | finding | <findings ledger path>; an unadjudicated finding is listed as hypothesis |
 | C5 | <one claim> | hypothesis | not backed; see <questions ledger path> |
 
 ## Open questions
 
-| Questions ledger entry | For | Blocks the decision? |
+| Questions ledger entry | Can answer | Blocking |
 |---|---|---|
-| <path> | <name or role> | yes / no |
+| <path> | <the entry's `can-answer`> | true / false |
 
 ## Recommendation (agent's draft)
 
@@ -74,7 +77,7 @@ Kinds: quote, query, telemetry, reproduction, finding, attestation, hypothesis.
 
 ## Response time and default if silent
 
-<From the profile's gates table: gate, response time, default. Or: "none: this waits for the owner's decision". Always "none" at P4 b or c; with no profile or no gate row for decision records; when the class is P9 c, irreversible or unclassified; when a covered surface is listed as unstaged; while a blocking question is open.>
+<From the profile's gates table: gate, response time, default. Or: "none: this waits for the owner's decision". Always "none" at P4 b or c; with no profile or no gate row for decision records; when the class is c or unclassified; when a covered surface is listed as unstaged; while a blocking question is open.>
 
 ## Decision
 
@@ -90,10 +93,16 @@ Kinds: quote, query, telemetry, reproduction, finding, attestation, hypothesis.
 
 ## Lenses, specs and walls to change
 
+<Lens rows are copied from the lens-placement skill's placement table, run with this record's path as the origin. Delete this note, and the marker lines with the sentence between them, once the table is filled.>
+
+<!-- shared:lens-source-mark -->
+Every lens line ends with its source as a literal mark: `(source: <kind>[, unvalidated], <pointer>)`. `<kind>` is `interview`, `record residue`, `escape`, `mandated control` or `imported`; `<pointer>` names the origin (person and date, record id, ledger entry path, requirement id, or where the line was imported from). An `imported` line carries `unvalidated` until a retro rules on it, and a `mandated control` line is never ablated.
+<!-- /shared:lens-source-mark -->
+
 | Path | Change, in one line | Owner | Kind |
 |---|---|---|---|
-| <the `AGENTS.md` nearest the covered paths> | <the one memory line saying why; `source: record residue NNNN`> | | lens |
-| <`.claude/rules/<module>.md`, a nested `AGENTS.md`, or a project skill directory> | | | lens |
+| <the memory file nearest the covered paths> | <the one memory line saying why, ending `(source: record residue, NNNN)`> | | lens |
+| <a path-scoped rule, a nested memory file, or a project skill directory> | <the line, ending `(source: record residue, NNNN)`> | | lens |
 | <spec path; or "new build item", "new retire item"> | | | spec |
 | <CI configuration, hook or required-reviewer rule> | <wiring for <check id>; listed only, never edited by an agent> | harness owner (T5) | wall |
 

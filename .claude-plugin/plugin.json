@@ -1,6 +1,6 @@
 {
   "name": "inverse-conway",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Process kit for running a software project with a few humans and many coding agents: profile, vision, roadmap, decision records, specs, lens placement and retros.",
   "author": {
     "name": "Hein Rutjes"

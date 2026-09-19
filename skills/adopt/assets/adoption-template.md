@@ -2,7 +2,8 @@
 
 <!--
 Made and maintained by the adopt skill. Background: agent-org-inverse-conway, process v2, section 4 "Bootstrap" and rule T5.
-This file is the only record of where adoption stands. It points to other artefacts and never restates them.
+This file is the only record of where adoption stands, and the one home of wall state: the roadmap points at rows 2.1 to 2.7 and does not repeat them. It points to other artefacts and never restates them.
+Rows marked "kit addition" are not among the five bootstrap steps of the process; the kit adds them so that the vision and the roadmap are in place before the pilot.
 Replace every <...>. Never invent a value: ask, or open a questions ledger entry and point to it.
 -->
 
@@ -12,19 +13,21 @@ Replace every <...>. Never invent a value: ask, or open a questions ledger entry
 | Status | in-progress |
 | Started | <YYYY-MM-DD> |
 | Closed | |
-| Harness owner (T5) | <name, role> |
-| Decision rights: approves the profile, decides keep or cut | <name, role> |
+| Harness owner (T5; in the profile: `dials.P4.role_matrix`, role `harness owner`) | <name, role> |
+| The owner: holds decision rights over the profile (`approval.approver`), approves it, decides keep or cut | <name, role> |
 | Tools: agents, hosting, CI | <as the owner named them> |
+| Confidential work expected | <yes or no, in the owner's words> |
+| Approval of agent tooling, or limits on what agents read or where inference runs, needed before an agent may read this repository | <no; or who and what, and the date it was given> |
 | Profile | <path; filled when 1.3 is `done`> |
 | P6 start, from the approved profile | <filled when 1.3 is `done`: a greenfield; b brownfield with tests; c brownfield without> |
 | Next action | <one line: what, and who takes it> |
 
-Status is `in-progress`, `adopted` or `stopped`. A stop carries the owner's reason in the log.
+Status is `in-progress`, `adopted` or `stopped`. A stop carries the owner's reason in the log. The profile skill reads this header and plays the answers back; it does not ask them again.
 
 ## How to read a row
 
 - State is one of `todo`, `doing`, `blocked`, `done`, `n-a`, `cut`.
-- `done` needs evidence: a path, a commit or PR id, a CI run id, a ledger entry, or an attestation (name, role, validity dates) that the person committed themselves or approved in review. The author's claim is not evidence.
+- `done` needs evidence: a path, a commit or PR id, a CI run id or a ledger entry. A person's word counts only as a facts ledger entry with `evidence: attestation` and status `attested`, inside its validity dates. The author's claim is not evidence.
 - `blocked` points to the questions ledger entry, the pilot item or the person it waits for. It does not stop rows that do not depend on it. `n-a` and `cut` give the reason.
 
 ## Step 0. Spike
@@ -33,7 +36,7 @@ Time-box, in the owner's words: <...>. Started <YYYY-MM-DD>, ended <YYYY-MM-DD>.
 
 Rows 0.1 to 0.5 run in a disposable repository, or on a throwaway branch that holds no project content: <where>. Nothing from the spike is merged into the project; only the facts entries enter it. Rows 0.6 and 0.7 need the real repository.
 
-Each result is a facts ledger entry with its reproduction. An untested row gets a questions ledger entry, and its fallback holds until the test is run.
+Each result is a facts ledger entry with `evidence: reproduction`. An untested row gets a questions ledger entry, and its fallback holds until the test is run.
 
 | # | Test | State | Result | Evidence (facts entry) | If refuted or untested |
 |---|---|---|---|---|---|
@@ -51,16 +54,18 @@ Each result is a facts ledger entry with its reproduction. An untested row gets 
 | # | Item | State | Evidence |
 |---|---|---|---|
 | 1.1 | Profile and its four tables (gates, release surfaces, done-states, systems of record), written with the profile skill | todo | <path> |
-| 1.2 | Payback metric, and what value counts as paid back, declared in the profile before any harness is built | todo | <path and field> |
-| 1.3 | Profile approved by whoever holds decision rights | todo | <their approving review, their commit, or an attestation they committed or approved in review> |
-| 1.4 | Governance onboarding. Applies at P10 b or c, or when P11 names any limit on what agents read, where inference runs, approved models or cloud agents; otherwise `n-a`. Dial values: <...> | todo | |
+| 1.2 | Payback declared in the profile before any harness is built: all five fields of `dials.P2.payback` are filled | todo | <profile path and the commit that filled them> |
+| 1.3 | Profile approved by the owner, in the profile itself and on the default branch | todo | <`approval.approved_in`, and the commit that put the file on the default branch> |
+| 1.4 | Governance onboarding, read from `governance_onboarding` in the approved profile: `n-a` when `needed` is false; otherwise every person in `approvers` has approved what `requires` states | todo | <for `n-a`: the key; otherwise each approver's review, commit or attested facts entry> |
+| 1.5 | Kit addition. Vision approved, written with the vision skill. It may run before or beside 1.1 to 1.4 and does not gate step 2; it is needed before 3.f and the pilot | todo | <path, and the commit that put the approved page on the default branch> |
 
-Payback:
+Payback. The profile is the system of record: point, do not copy.
 
-- Metric: <pointer into the profile; do not copy the value>
-- What counts as paid back: <pointer into the profile; do not copy the value>
-- Declared by <name, role> on <YYYY-MM-DD>
-- Time-box for building the walls: <the owner's words, or "none set">
+- Metric: `dials.P2.payback.metric` in <profile path>
+- What counts as paid back: `dials.P2.payback.paid_back_when`
+- Measured from: `dials.P2.payback.evidence_source`
+- Declared by, and on: `dials.P2.payback.declared_by`, `dials.P2.payback.declared_on`
+- Time-box for building the walls: <the owner's words, or "none set">. The roadmap skill reads it here.
 
 ## Step 2. Walls
 
@@ -69,17 +74,19 @@ Built by the harness owner and applied through the ordinary human change path (T
 - Ordinary human change path here, in the owner's words: <who reviews, who applies>
 - Two-person rule on walls (P4 b or c): <yes or no, from the approved profile>
 - An agent-drafted wall change is reviewed as a diff from a base checkout, never in an agent session opened on the draft branch.
-- P6 a only: rows that need code (2.1, 2.5, the guard's test diff) are `blocked` on pilot item 4.1 or 4.2 and close before 4.3. Order confirmed by <harness owner, date>.
+- P6 a only: rows that need code (2.1, 2.5, the guard's test diff) are `blocked` on pilot item 4.1 or 4.2 and close before 4.3. Order confirmed by <harness owner, date>. The roadmap skill reads it here.
 
-| # | Wall | State | Draft (path or PR, prepared by) | Applied by (name, commit or setting, date) | Evidence |
+Rows 2.1 to 2.6 are global M0, the six items the harness owner builds. Row 2.7 exists only at P6 c.
+
+| # | Item | State | Draft (path or PR, prepared by) | Applied by (name, commit or setting, date) | Evidence |
 |---|---|---|---|---|---|
 | 2.1 | Reproducible build | todo | | | |
-| 2.2 | Guard: computed from the base, keeps the diff inside `touches`; without a spec it derives gates from the path classes touched | todo | | | |
+| 2.2 | Guard: computed from the base, it keeps the diff inside the `touches` of the spec that the first line of the pull request body names (`Spec: <spec path>`); without a spec it derives gates from the rows of the profile's `path_classes` table that match the paths touched | todo | | | |
 | 2.3 | Read wall: allowlist of paths, connectors and environments (V5) | todo | | | |
 | 2.4 | Execute wall: fake externals or disposable state, no secret that can release or reach production (V5) | todo | | | |
 | 2.5 | Acceptance job | todo | | | |
 | 2.6 | Machine credential without merge rights | todo | | | <the row 0.6 test repeated under this credential: a push and a merge refused> |
-| 2.7 | P6 c only: exports of the running system with a blocking drift check | todo | | | |
+| 2.7 | P6 c only, otherwise `n-a`: exports of the running system with a blocking drift check. The harness owner says whether they belong here with the walls or with the milestone that first touches the exported system: <answer, name, date>. If with the milestone, the row is `n-a` and points to that milestone in the roadmap | todo | | | |
 
 Global M0 ends here. More verification is bought per seam or slice (P8) and is recorded with the pilot item that needed it.
 
@@ -107,9 +114,12 @@ Sources outside the repository, as the owner listed them. The agent does not rea
 
 | # | Item | State | Evidence |
 |---|---|---|---|
-| 3.a | Always-on memory in `AGENTS.md` with the lens index (the list of rule files, project skills and ledgers, with the paths each applies to), beside a `CLAUDE.md` containing `@AGENTS.md` | todo | |
-| 3.b | Every lens line added carries a `source` | todo | |
-| 3.c | The owner confirms that nothing the agents need is left outside the repository | todo | <attestation (name, role, validity dates), committed by the owner or approved by them in review> |
+| 3.a | Every source listed above shows where its content went | todo | <the rows above> |
+| 3.b | Every lens line added ends with its source mark, `(source: <kind>[, unvalidated], <pointer>)`; what came from a source above is `imported` | todo | |
+| 3.c | The owner confirms that nothing the agents need is left outside the repository | todo | <facts entry with `evidence: attestation`, status `attested`> |
+| 3.d | Always-on memory in `AGENTS.md` (or the path in `artefacts.memory`) with the lens index (the list of rule files, project skills and ledgers, with the paths each applies to), beside a `CLAUDE.md` containing `@AGENTS.md`; made as an ordinary change, before the first placement | todo | <commit or PR> |
+| 3.e | Kit addition. The memory file carries the line that imports or points at the approved vision (proposed by the vision skill; needs 1.5 and 3.d) | todo | <commit or PR> |
+| 3.f | Kit addition. Roadmap approved, written with the roadmap skill (needs 1.3 and 1.5). `done` before pilot item 4.2 (brownfield) or 4.1 (greenfield) | todo | <path, and the approving review or commit at the gate that covers the roadmap> |
 
 ## Step 4. Pilot
 
@@ -126,11 +136,11 @@ The order follows P6. Delete the list that does not apply.
 
 ## Keep or cut
 
-Filled when the pilot is complete. The agent assembles measured against declared; whoever holds decision rights decides. What has not paid back is cut. Candidates are what the dials added. Not candidates: the six global M0 rows, the design and release gates, and anything with source `mandated control`; wanting one of those gone is a decision to stop (status `stopped`, reason in the log). A wall is cut by the harness owner through the ordinary human change path; a lens is cut through ordinary review.
+Filled when the pilot is complete. The retro skill measures against the payback metric, proposes the candidates and records the owner's decisions in its retro note; this table only points there and records the change. Retro note: <path>. If the owner wants something gone that the retro's floor protects, that is a decision to stop (status `stopped`, reason in the log). A wall is cut by the harness owner through the ordinary human change path; a lens is cut through ordinary review.
 
-| Harness component (a dial-added wall, an extra gate, a lens, a kit skill) | Measured against the payback metric (pointers) | Decision (keep or cut) | Decided by, date (their commit, approving review or attestation) | Change (commit or PR, applied by) |
-|---|---|---|---|---|
-| <...> | | | | |
+| Harness component (a dial-added wall, an extra gate, a lens, a kit skill) | Decision row in the retro note (pointer) | Change (commit or PR, applied by) |
+|---|---|---|
+| <...> | | |
 
 ## Log
 

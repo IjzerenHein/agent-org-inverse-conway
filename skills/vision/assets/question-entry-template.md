@@ -1,26 +1,37 @@
-# <The question, in one sentence>
+---
+ledger: questions
+id: YYYY-MM-DD-slug            # the file name without .md
+status: open                   # open | closed
+raised: YYYY-MM-DD
+raised-by: ""                  # the skill or role, and the person or artefact it came from, for example "spec skill, interview with <name>" or "builder, spec 012"
+can-answer: ""                 # the named person, system, measurement or experiment that can answer; "not known yet" if nobody knows. Never guess a name.
+blocks: ""                     # what waits on the answer: a file and field, a spec section or acceptance id, a milestone, a record; or "nothing"
+blocking: false                # true when the thing named in `blocks` cannot be approved, built or checked without the answer
+closed-by: ""                  # human decision (name, role) | attested fact | evidence id. Never an agent's opinion.
+closed-on: ""                  # YYYY-MM-DD; empty while open
+closed-pointer: ""             # path of the record, facts entry or finding, or the evidence id or review URL, that holds the answer
+---
 
-- Status: open
-- Raised: YYYY-MM-DD, by the <skill name> skill, with <name>, <role>
-- Who can answer: <name and role, or "not known yet">
-- Blocks: `<path of the file that waits for the answer>`, section "<section name>"
+# <The question, in one sentence that a person or a piece of evidence can answer>
 
-<!--
-Delete this comment when filling in the template.
-One file per question, named YYYY-MM-DD-slug.md, in the questions ledger.
-"Who can answer" comes from the person who raised the question; never guess a name.
-A question closes by human decision, attested fact or evidence id, never by agent opinion.
-Agents prepare options, never facts. Leave "Answer" empty until a human or an evidence id closes it.
--->
+<!-- One file per question: <ledgers>/questions/YYYY-MM-DD-slug.md. Delete this comment. Agents prepare options, never facts. A question closes by human decision, attested fact or evidence id, never by agent opinion. -->
 
-## Context
+## Why it matters
 
-<Why this came up. Quote the words of the person who raised it. Do not guess at the answer.>
+<What would otherwise have to be guessed, and what changes with the answer. Quote the person who raised it where you can.>
 
 ## Options
 
-- <an option, and what it would change in the blocked file. Remove this section if there are no options to offer.>
+- <an option and what it would mean; "none" if there are none. Options are never answers.>
+
+## Working assumption
+
+<The value or reading used until this closes, and why it is the stricter of the plausible ones; "none" when nothing proceeds meanwhile.>
 
 ## Answer
 
-<Empty while open. When closed, one of: the decision, with who made it (name and role) and the date; the attested fact, with who attests it (name and role) and its validity dates; or the evidence id. Then set Status to closed.>
+<Empty while open. Filled from the decision, attestation or evidence named in `closed-by`, quoted or linked. Then set `status: closed` and fill the three `closed-` fields.>
+
+## Pointers
+
+<Appended later, newest last: findings, records, evidence ids. Never re-summarise.>
